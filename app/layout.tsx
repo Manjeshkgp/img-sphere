@@ -2,12 +2,13 @@ import "./globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 
-const Providers = dynamic(()=>import("@/components/Theme/ThemeProvider"));
-const ThemeChanger = dynamic(()=>import("@/components/Theme/ThemeChanger"));
+const Providers = dynamic(() => import("@/components/Theme/ThemeProvider"));
+const Navbar = dynamic(() => import("@/components/Navbar/Navbar"));
+const ThemeChanger = dynamic(() => import("@/components/Theme/ThemeChanger"));
 
 export const metadata: Metadata = {
-  title: "Create Night Mode",
-  description: "Manually Created",
+  title: "Image Sphere",
+  description: "Find Best Images here",
 };
 
 export default function RootLayout({
@@ -19,10 +20,9 @@ export default function RootLayout({
     <html>
       <body>
         <Providers>
-          {/* <div className="relative"> */}
-            <ThemeChanger />
-            {children}
-          {/* </div> */}
+          <Navbar />
+          {children}
+          <ThemeChanger />
         </Providers>
       </body>
     </html>
