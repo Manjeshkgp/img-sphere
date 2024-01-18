@@ -2,6 +2,7 @@ import "./globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import { StoreProviders } from "@/store/StoreProvider";
+import AuthProvider from "@/components/Auth/AuthProvider";
 
 const Providers = dynamic(() => import("@/components/Theme/ThemeProvider"));
 const Navbar = dynamic(() => import("@/components/Navbar/Navbar"));
@@ -18,6 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
+    <AuthProvider>
     <html>
       <body>
         <StoreProviders>
@@ -29,5 +31,6 @@ export default function RootLayout({
         </StoreProviders>
       </body>
     </html>
+    </AuthProvider>
   );
 }

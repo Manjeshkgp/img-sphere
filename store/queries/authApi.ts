@@ -4,17 +4,10 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL + "auth/",
-    credentials: "same-origin",
+    credentials: "include",
     mode:"cors",
   }),
   endpoints: (builder) => ({
-    login: builder.mutation({
-      query: (credentials) => ({
-        url: "login",
-        method: "POST",
-        body: credentials,
-      }),
-    }),
     signup: builder.mutation({
       query: (credentials) => ({
         url: "register",
@@ -25,4 +18,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useSignupMutation } = authApi;
+export const { useSignupMutation } = authApi;
