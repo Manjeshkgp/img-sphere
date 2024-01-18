@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
+import { StoreProviders } from "@/store/StoreProvider";
 
 const Providers = dynamic(() => import("@/components/Theme/ThemeProvider"));
 const Navbar = dynamic(() => import("@/components/Navbar/Navbar"));
@@ -19,11 +20,13 @@ export default function RootLayout({
   return (
     <html>
       <body>
-        <Providers>
-          <Navbar />
-          {children}
-          <ThemeChanger />
-        </Providers>
+        <StoreProviders>
+          <Providers>
+            <Navbar />
+            {children}
+            <ThemeChanger />
+          </Providers>
+        </StoreProviders>
       </body>
     </html>
   );

@@ -25,7 +25,7 @@ const Background: FC<BackgroundProps> = ({}) => {
     }
   
     const light = theme === "light";
-  return (<div className='fixed inset-0 select-none pointer-events-none z-[0]'>
+  return (<div className='fixed inset-0 select-none pointer-events-none z-[-1]'>
    <Image placeholder='blur' blurDataURL={light?daybg.blurDataURL:nightbg.blurDataURL} priority src={light?daybg:nightbg} alt='Background Image' sizes='100vw' className='w-screen h-screen object-cover object-top'/>
   </div>)
 }

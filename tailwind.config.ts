@@ -15,7 +15,7 @@ const config: Config = {
       fontFamily:{
         "euclid_circular_b":["Euclid_Circular_B","sans-serif"],
         "helvetica_neue":["Helvetica Neue",'Helvetica']
-      }
+      },
     },
   },
   plugins: [],

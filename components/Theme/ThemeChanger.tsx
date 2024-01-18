@@ -24,7 +24,7 @@ const Themechanger = () => {
 
   const light = theme === "light";
   return (
-    <button className="absolute z-40 bottom-5 right-5 dark:bg-gray-900 dark:text-yellow-400 bg-gray-100 text-gray-900 w-10 h-10 rounded-full flex justify-center items-center">
+    <button className="fixed z-40 bottom-5 right-5 dark:bg-gray-900 dark:text-yellow-400 bg-gray-100 text-gray-900 w-10 h-10 rounded-full flex justify-center items-center">
       {light ? (
         <MoonSvg onClick={() => setTheme("dark")}/>
       ) : (

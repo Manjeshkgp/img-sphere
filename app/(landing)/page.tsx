@@ -1,8 +1,10 @@
 import dynamic from "next/dynamic";
-const Background = dynamic(() => import("./components/Background"));
+const HeroComponents = dynamic(()=>import("./components/HeroComponents"))
 
 export default function page() {
-  return (<>
-      <Background />
-  </>);
+  return (
+    <>
+      <HeroComponents/>
+    </>
+  );
 }
