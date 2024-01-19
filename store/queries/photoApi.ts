@@ -7,17 +7,11 @@ export const photoApi = createApi({
     baseUrl: process.env.NEXT_PUBLIC_BASE_URL + "photos/",
     credentials: "include",
     mode:"cors",
-    prepareHeaders:(headers,{getState})=>{
-      const jwt = (getState() as RootState)?.auth?.jwt;
-      if(jwt){
-        headers.set("Authorization",jwt)
-      }
-    }
   }),
   endpoints: (builder) => ({
     getPhotos: builder.query({
       query: (data) => ({
-        url: `?key${data?.pixabayAPIKey}&q=${encodeURI(data?.search)}&image_type=photo`,
+        url: `?q=${data?.search}`,
         method: "GET",
       }),
     }),
