@@ -7,7 +7,7 @@ export default function AllImages() {
   const {status} = useSession();
   const pathname = useParams();
   const {data,isLoading} = useGetPhotosQuery({search:pathname?.search},{skip:status!=="authenticated"});
-  console.log({data,isLoading})
+  console.log({data,isLoading});
   return (
     <div className='text-black'>
 
