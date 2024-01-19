@@ -35,10 +35,10 @@ export const authOptions: any = {
         }
       },
     }),
-    GithubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID ?? "",
+    //   clientSecret: process.env.GITHUB_SECRET ?? "",
+    // }),
     // ...add more providers here
   ],
   callbacks: {
@@ -46,24 +46,24 @@ export const authOptions: any = {
       if (account?.provider == "credentials") {
         return true;
       }
-      if (account?.provider == "github") {
-        await connectMongoDB();
-        try {
-          const existingUser = await User.findOne({ email: user.email });
-          if (!existingUser) {
-            const newUser = new User({
-              email: user.email,
-            });
+      // if (account?.provider == "github") {
+      //   await connectMongoDB();
+      //   try {
+      //     const existingUser = await User.findOne({ email: user.email });
+      //     if (!existingUser) {
+      //       const newUser = new User({
+      //         email: user.email,
+      //       });
 
-            await newUser.save();
-            return true;
-          }
-          return true;
-        } catch (err) {
-          console.log("Error saving user", err);
-          return false;
-        }
-      }
+      //       await newUser.save();
+      //       return true;
+      //     }
+      //     return true;
+      //   } catch (err) {
+      //     console.log("Error saving user", err);
+      //     return false;
+      //   }
+      // }
     },
   },
 };
