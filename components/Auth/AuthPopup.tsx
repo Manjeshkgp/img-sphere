@@ -1,9 +1,9 @@
 "use client";
 
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import Button from "../Button/Button";
 import { signIn } from "next-auth/react";
 import { useSignupMutation } from "@/store/queries/authApi";
+import Loader from "@/components/Loader/Loader";
 
 interface AuthPopupProps {
   popupState: "Login" | "Signup" | undefined;
@@ -12,20 +12,36 @@ interface AuthPopupProps {
 
 const AuthPopup: FC<AuthPopupProps> = ({ popupState, setPopupState }) => {
   const [form, setForm] = useState({ email: "", password: "" });
-  const [showPass, setShowPass] = useState(false);
-  const [signup, { data, isSuccess, isLoading }] = useSignupMutation();
+  const [showPass, setShowPass] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [signup, { isLoading }] = useSignupMutation();
   return (
     <>
       <div className="z-20 fixed flex justify-center items-center inset-0 dark:bg-[rgba(0,0,0,0.4)] bg-[rgba(255,255,255,0.4)] backdrop-blur-3xl">
+        {(isLoading||loading)&&(<div className="fixed z-30 flex justify-center items-center inset-0 dark:bg-[rgba(0,0,0,0.4)] bg-[rgba(255,255,255,0.4)] backdrop-blur-3xl">
+          <Loader/>
+        </div>)}
         <form
           onSubmit={async (e) => {
+            setLoading(true);
             e.preventDefault();
             if (popupState === "Login") {
-              const res = await signIn("credentials", {
+              signIn("credentials", {
                 email: form.email,
                 password: form.password,
                 redirect: false,
-              });
+              })
+                .then((res) => {
+                  if (res?.ok) {
+                    setLoading(false);
+                    setPopupState(undefined);
+                  }else{
+                    setLoading(false);
+                  }
+                })
+                .catch((err) => {
+                  setLoading(false);
+                });
             } else {
               signup({ email: form.email, password: form.password })
                 .then(async () => {
@@ -34,10 +50,17 @@ const AuthPopup: FC<AuthPopupProps> = ({ popupState, setPopupState }) => {
                     password: form.password,
                     redirect: false,
                   })
-                    .then(() => {setPopupState(undefined)})
-                    .catch((err) => {});
+                    .then(() => {
+                      setPopupState(undefined);
+                      setLoading(false);
+                    })
+                    .catch((err) => {
+                      setLoading(false);
+                    });
                 })
-                .catch((err) => {});
+                .catch((err) => {
+                  setLoading(false);
+                });
             }
           }}
           className="w-[90vw] max-w-[400px] rounded-[20px] border border-[#F6E2E2] bg-gradient-to-br from-[rgba(111,100,239,0.20)] to-[rgba(169,162,252,0.20)] bg-blend-overlay backdrop-blur-[20px] flex flex-col justify-start items-center gap-4 py-14"

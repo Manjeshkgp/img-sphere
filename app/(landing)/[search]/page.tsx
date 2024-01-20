@@ -1,10 +1,27 @@
 import dynamic from "next/dynamic";
-import AllImages from "./components/AllImages";
 
 const Hero = dynamic(() => import("./components/Hero"));
-const TopicSwiper = dynamic(() => import("./components/TopicSwiper"));
+const AllImagesAndTopicSwiper = dynamic(() => import("./components/AllImagesAndTopicSwiper"));
 
-export default function page() {
+export async function generateMetadata({params}:{
+  params:{
+    search:string
+  }
+}) {
+  const {search} = params;
+  const decodedPathname = decodeURIComponent(search).replace(/%20/g, '+');
+  return ({
+    title: decodedPathname +" | Img Sphere"
+  })
+}
+
+
+export default function page({params}:{
+  params:{
+    search:string
+  }
+}) {
+  const {search} = params;
   const sampleArr = [
     "digital",
     "computer",
@@ -28,10 +45,7 @@ export default function page() {
   return (
     <>
       <Hero />
-      <div className="relative z-[3] bg-white h-full min-h-[calc(100vh-320px)] md:min-h-[calc(100vh-358px)] w-full">
-        <TopicSwiper list={sampleArr} />
-        <AllImages/>
-      </div>
+      <AllImagesAndTopicSwiper search={search} list={sampleArr}/>
     </>
   );
 }

@@ -53,3 +53,14 @@
   ::-webkit-scrollbar-track{
     background-color: black;
   }
+
+button{
+    transition: all;
+    transition-duration: 250ms;
+}
+
+button:active{
+    transition: all;
+    transition-duration: 250ms;
+    scale: 0.9;
+}
