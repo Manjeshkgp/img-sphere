@@ -1,9 +1,10 @@
 "use client";
 
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import { Dispatch, FC, FormEvent, SetStateAction, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSignupMutation } from "@/store/queries/authApi";
 import Loader from "@/components/Loader/Loader";
+import toast from "react-hot-toast";
 
 interface AuthPopupProps {
   popupState: "Login" | "Signup" | undefined;
@@ -15,54 +16,76 @@ const AuthPopup: FC<AuthPopupProps> = ({ popupState, setPopupState }) => {
   const [showPass, setShowPass] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [signup, { isLoading }] = useSignupMutation();
+  const formSubmitFunc = async (e:FormEvent<HTMLFormElement>) => {
+    setLoading(true);
+    e.preventDefault();
+    if (popupState === "Login") {
+      signIn("credentials", {
+        email: form.email,
+        password: form.password,
+        redirect: false,
+      })
+        .then((res) => {
+          if (res?.ok) {
+            setLoading(false);
+            setPopupState(undefined);
+          } else {
+            setLoading(false);
+            toast.error("Please enter your credentials correctly");
+          }
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error("Some error occured during your login");
+        });
+    } else {
+      signup({ email: form.email, password: form.password })
+        .then(async (res: any) => {
+          if ("error" in res) {
+            const error = res.error;
+            if ("data" in error && "message" in error?.data) {
+              toast.error(error?.data?.message as string);
+            } else {
+              toast.error("Some eror occured during login");
+            }
+            setLoading(false);
+            return;
+          }
+          await signIn("credentials", {
+            email: form.email,
+            password: form.password,
+            redirect: false,
+          })
+            .then((res) => {
+              if (res?.ok) {
+                setLoading(false);
+                setPopupState(undefined);
+              } else {
+                setLoading(false);
+                toast.error("Some issues happened, but account is created, please try to login");
+              }
+            })
+            .catch((err) => {
+              setLoading(false);
+              toast.error("Some eror occured during login");
+            });
+        })
+        .catch((err) => {
+          setLoading(false);
+          toast.error("Some eror occured during login");
+        });
+    }
+  }
   return (
     <>
       <div className="z-20 fixed flex justify-center items-center inset-0 dark:bg-[rgba(0,0,0,0.4)] bg-[rgba(255,255,255,0.4)] backdrop-blur-3xl">
-        {(isLoading||loading)&&(<div className="fixed z-30 flex justify-center items-center inset-0 dark:bg-[rgba(0,0,0,0.4)] bg-[rgba(255,255,255,0.4)] backdrop-blur-3xl">
-          <Loader/>
-        </div>)}
+        {(isLoading || loading) && (
+          <div className="fixed z-30 flex justify-center items-center inset-0 dark:bg-[rgba(0,0,0,0.4)] bg-[rgba(255,255,255,0.4)] backdrop-blur-3xl">
+            <Loader />
+          </div>
+        )}
         <form
-          onSubmit={async (e) => {
-            setLoading(true);
-            e.preventDefault();
-            if (popupState === "Login") {
-              signIn("credentials", {
-                email: form.email,
-                password: form.password,
-                redirect: false,
-              })
-                .then((res) => {
-                  if (res?.ok) {
-                    setLoading(false);
-                    setPopupState(undefined);
-                  }else{
-                    setLoading(false);
-                  }
-                })
-                .catch((err) => {
-                  setLoading(false);
-                });
-            } else {
-              signup({ email: form.email, password: form.password })
-                .then(async () => {
-                  await signIn("credentials", {
-                    email: form.email,
-                    password: form.password,
-                    redirect: false,
-                  })
-                    .then(() => {
-                      setPopupState(undefined);
-                      setLoading(false);
-                    })
-                    .catch((err) => {
-                      setLoading(false);
-                    });
-                })
-                .catch((err) => {
-                  setLoading(false);
-                });
-            }
-          }}
+          onSubmit={formSubmitFunc}
           className="w-[90vw] max-w-[400px] rounded-[20px] border border-[#F6E2E2] bg-gradient-to-br from-[rgba(111,100,239,0.20)] to-[rgba(169,162,252,0.20)] bg-blend-overlay backdrop-blur-[20px] flex flex-col justify-start items-center gap-4 py-14"
         >
           <p

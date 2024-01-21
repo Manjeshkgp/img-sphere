@@ -1,4 +1,5 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 
 const SearchBox = dynamic(()=>import("@/components/SearchBox/SearchBox"));
 
@@ -12,12 +13,12 @@ export default function HeroComponents() {
           Discover over 2,000,000 free Stock Images
         </h2>
         <SearchBox />
-        <div className="bg-[rgba(217,217,217,0.12)] backdrop-blur-[25px] shadow-navbar rounded-[8.91px] w-[271.6px] h-[39.18px] flex justify-center items-center font-euclid_circular_b text-[13.359px] leading-[160%] text-white mt-[20.48px]">
+        <Link href={"/flowers, love, forest, river"} className="bg-[rgba(217,217,217,0.12)] backdrop-blur-[25px] shadow-navbar rounded-[8.91px] w-[271.6px] h-[39.18px] flex justify-center items-center font-euclid_circular_b text-[13.359px] leading-[160%] text-white mt-[20.48px] transition-all active:scale-90">
           <p className="font-normal">
             <span className="font-bold">Trending: </span>
             flowers, love, forest, river
           </p>
-        </div>
+        </Link>
       </div>
   )
 }
